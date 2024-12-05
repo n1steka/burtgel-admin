@@ -1,11 +1,11 @@
 import axios from "axios";
 
-let utga: any = true;
+let utga: any = false;
 const axiosInstance = axios.create({
   baseURL:
     utga === true
       ? "http://localhost:8080/api"
-      : "https://hitech-mn-backend.onrender.com/api",
+      : "https://rest-api-liiy.onrender.com/api",
 });
 
 axiosInstance.interceptors.request.use(

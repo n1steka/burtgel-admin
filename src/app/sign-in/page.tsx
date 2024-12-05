@@ -47,7 +47,7 @@ export default function SignIn() {
                 htmlFor="email"
                 className="block text-sm font-medium leading-6 text-gray-400"
               >
-                Утасны дугаар
+                И-мэйл хаяг
               </label>
               <div className="mt-2">
                 <Input
