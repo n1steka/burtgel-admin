@@ -21,6 +21,12 @@ const data = {
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
+
+    {
+      key: "",
+      label: "Үндсэн",
+      icon: <PieChart size={18} />,
+    },
     {
       key: "category",
       label: "Ангилал",
@@ -36,6 +42,11 @@ const data = {
       label: "Бүтээгдэхүүн",
       icon: <BookOpen size={18} />,
     },
+    {
+      key: "user",
+      label: "Хэрэглэгч",
+      icon: <Command size={18} />,
+  },
   ] as NavItem[],
 };
 

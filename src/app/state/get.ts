@@ -16,3 +16,12 @@ export const getOrders = async (filters = {}) => {
     console.error("Error fetching data:", error);
   }
 };
+
+export const getUsers = async (filters = {}) => {
+  try {
+    const response = await axiosInstance.get(`/users`, { params: filters });
+    return response;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
