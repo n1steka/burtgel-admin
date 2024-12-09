@@ -30,7 +30,8 @@ export default function UserPage() {
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
-    name: ""
+    name: "",
+    role: "",
   });
 
   const fetchUser = async () => {
@@ -63,7 +64,7 @@ export default function UserPage() {
       setLoading(true);
       const payload = {
         ...userInfo,
-        ...values
+        ...values,
       };
 
       const endpoint = id ? `/create/ter/${id}` : "/create/ter";
@@ -118,8 +119,8 @@ export default function UserPage() {
                   },
                   {
                     type: "email",
-                    message: "Зөв и-мэйл хаяг оруулна уу!"
-                  }
+                    message: "Зөв и-мэйл хаяг оруулна уу!",
+                  },
                 ]}
               >
                 <Input placeholder="И-мэйл хаяг оруулах" />
@@ -132,7 +133,7 @@ export default function UserPage() {
                   {
                     required: true,
                     message: "Нууц үгээ оруулна уу!",
-                  }
+                  },
                 ]}
               >
                 <Input.Password placeholder="Нууц үг оруулах" />
@@ -145,10 +146,29 @@ export default function UserPage() {
                   {
                     required: true,
                     message: "Нэрээ оруулна уу!",
-                  }
+                  },
                 ]}
               >
                 <Input placeholder="Нэр оруулах" />
+              </Form.Item>
+
+              <Form.Item
+                label="Эрх"
+                name="role"
+                rules={[
+                  {
+                    required: true,
+                    message: "Эрхээ сонгоно уу!",
+                  },
+                ]}
+              >
+                <Select
+                  placeholder="Эрх сонгох"
+                  options={[
+                    { value: "admin", label: "Админ" },
+                    { value: "user", label: "Энгийн хэрэглэгч" },
+                  ]}
+                />
               </Form.Item>
             </Col>
           </Row>

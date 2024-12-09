@@ -21,7 +21,6 @@ const data = {
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
-
     {
       key: "",
       label: "Үндсэн",
@@ -29,7 +28,7 @@ const data = {
     },
     {
       key: "category",
-      label: "Ангилал",
+      label: "Алба хэлтэс",
       icon: <Layout size={18} />,
     },
     // {
@@ -46,7 +45,7 @@ const data = {
       key: "user",
       label: "Хэрэглэгч",
       icon: <Command size={18} />,
-  },
+    },
   ] as NavItem[],
 };
 
