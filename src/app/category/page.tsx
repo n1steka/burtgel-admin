@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axiosInstance from "@/hooks/axios";
+import Link from "next/link";
 import {
-  Table,
   Tag,
   Button,
   Input,
@@ -13,9 +13,18 @@ import {
   Menu,
   Typography,
   message,
+  List,
+  Space,
+  Card,
+  Row,
+  Col,
 } from "antd";
-import { DeleteOutlined, PlusOutlined, EditOutlined } from "@ant-design/icons";
-import type { SortOrder } from "antd/es/table/interface";
+import {
+  DeleteOutlined,
+  PlusOutlined,
+  EditOutlined,
+  FolderOutlined,
+} from "@ant-design/icons";
 import { useAuth } from "@/context/AuthContext";
 const { Sider, Content } = Layout;
 const { Title } = Typography;
@@ -86,10 +95,8 @@ export default function Home() {
       };
 
       if (parentId === null) {
-        // Creating main category
         await axiosInstance.post("/category", payload);
       } else {
-        // Creating sub-category
         await axiosInstance.post("/category", payload);
       }
 
@@ -130,13 +137,11 @@ export default function Home() {
 
       if (editingCategory) {
         if (editingCategory.parentid === null) {
-          // Editing main category
           await axiosInstance.put(`/category/${editingCategory.id}`, {
             ...payload,
             parentid: null,
           });
         } else {
-          // Editing sub-category
           await axiosInstance.put(`/category/${editingCategory.id}`, payload);
         }
         message.success("Category updated successfully");
@@ -256,88 +261,19 @@ export default function Home() {
     setIsEditModalOpen(true);
   };
 
-  const columns = [
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "Status",
-      dataIndex: "isactive",
-      key: "isactive",
-      render: (isactive: boolean) => (
-        <Tag color={isactive ? "success" : "error"}>
-          {isactive ? "Active" : "Inactive"}
-        </Tag>
-      ),
-    },
-    {
-      title: "Created At",
-      dataIndex: "createdat",
-      key: "createdat",
-      render: (date: string) => new Date(date).toLocaleDateString(),
-      sorter: (a: Category, b: Category) =>
-        new Date(a.createdat).getTime() - new Date(b.createdat).getTime(),
-      sortDirections: ["ascend", "descend"] as SortOrder[],
-    },
-    {
-      title: "Updated At",
-      dataIndex: "updatedat",
-      key: "updatedat",
-      render: (date: string) => new Date(date).toLocaleDateString(),
-      sorter: (a: Category, b: Category) =>
-        new Date(a.updatedat).getTime() - new Date(b.updatedat).getTime(),
-      sortDirections: ["ascend", "descend"] as SortOrder[],
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (_: unknown, record: Category) => (
-        <div className="flex gap-2">
-          {isAdmin && (
-            <>
-              <Button
-                type="primary"
-                icon={<EditOutlined />}
-                onClick={() => handleEditClick(record)}
-              >
-                Edit
-              </Button>
-              <Button
-                type="primary"
-                danger
-                icon={<DeleteOutlined />}
-                onClick={() =>
-                  handleDeleteCategory(record.id, record.parentid === null)
-                }
-              >
-                Delete
-              </Button>
-            </>
-          )}
-        </div>
-      ),
-    },
-  ];
-
   const { isAdmin } = useAuth();
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider width={300} theme="light">
-        <div style={{ padding: 16 }}>
+      <Sider width={250} theme="light">
+        <div style={{ padding: 12 }}>
           <Title level={5}>Байгууллага</Title>
           {isAdmin && (
             <Button
+              size="small"
               type="primary"
               icon={<PlusOutlined />}
-              className="mb-2"
+              className="mb-3 w-full"
               onClick={() => {
                 setSelectedMainCategory(null);
                 setIsModalOpen(true);
@@ -346,50 +282,64 @@ export default function Home() {
               Нэмэх
             </Button>
           )}
-          <Menu
-            mode="vertical"
-            selectedKeys={[selectedMainCategory?.id?.toString() ?? ""]}
-          >
+          <div className="folder-list">
             {mainCategories.map((item) => (
-              <Menu.Item
+              <Card
+                size="small"
                 key={item.id}
+                className={`folder-card mb-2 ${
+                  selectedMainCategory?.id === item.id ? "selected" : ""
+                }`}
                 onClick={() => handleMainCategoryClick(item)}
+                hoverable
+                style={{
+                  cursor: "pointer",
+                  backgroundColor:
+                    selectedMainCategory?.id === item.id ? "#f0f0f0" : "white",
+                }}
               >
-                <span className="text-sm">{item.name}</span>
-                {isAdmin && (
-                  <>
-                    <Button
-                      type="text"
-                      size="small"
-                      icon={<EditOutlined />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditClick({
-                          ...item,
-                          parentid: null,
-                        } as Category);
-                      }}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FolderOutlined
+                      style={{ fontSize: 16, marginRight: 6, color: "#1890ff" }}
                     />
-                    <Button
-                      type="text"
-                      size="small"
-                      danger
-                      icon={<DeleteOutlined />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteCategory(item.id, true);
-                      }}
-                    />
-                  </>
-                )}
-              </Menu.Item>
+                    <span className="text-sm font-medium">{item.name}</span>
+                  </div>
+                  {isAdmin && (
+                    <Space size={2}>
+                      <Button
+                        type="text"
+                        size="small"
+                        icon={<EditOutlined />}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditClick({
+                            ...item,
+                            parentid: null,
+                          } as Category);
+                        }}
+                      />
+                      <Button
+                        type="text"
+                        size="small"
+                        danger
+                        icon={<DeleteOutlined />}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteCategory(item.id, true);
+                        }}
+                      />
+                    </Space>
+                  )}
+                </div>
+              </Card>
             ))}
-          </Menu>
+          </div>
         </div>
       </Sider>
 
       <Layout>
-        <Content style={{ padding: 24 }}>
+        <Content style={{ padding: 14 }}>
           <div
             style={{
               marginBottom: 16,
@@ -398,11 +348,12 @@ export default function Home() {
               alignItems: "center",
             }}
           >
-            <Title level={4}>
+            <Title level={5}>
               {selectedMainCategory ? selectedMainCategory.name : "Categories"}
             </Title>
             {isAdmin && selectedMainCategory && (
               <Button
+                size="small"
                 type="primary"
                 icon={<PlusOutlined />}
                 onClick={() => setIsModalOpen(true)}
@@ -412,14 +363,55 @@ export default function Home() {
             )}
           </div>
 
-          <Table
-            columns={columns}
-            dataSource={categories}
-            rowKey="id"
-            pagination={pagination}
-            loading={isLoading}
-          />
-
+          <Row gutter={[12, 12]}>
+            {categories.map((item) => (
+              <Col key={item.id} xs={24} sm={12} md={8} lg={6}>
+                <Card
+                  size="small"
+                  hoverable
+                  className="folder-item"
+                  actions={
+                    isAdmin
+                      ? [
+                          <Button
+                            key="edit"
+                            type="text"
+                            size="small"
+                            icon={<EditOutlined />}
+                            onClick={() => handleEditClick(item)}
+                          />,
+                          <Button
+                            key="delete"
+                            type="text"
+                            size="small"
+                            danger
+                            icon={<DeleteOutlined />}
+                            onClick={() =>
+                              handleDeleteCategory(
+                                item.id,
+                                item.parentid === null
+                              )
+                            }
+                          />,
+                        ]
+                      : []
+                  }
+                >
+                  <Link href={`/category/${item.id}`}>
+                    <Card.Meta
+                      avatar={
+                        <FolderOutlined
+                          style={{ fontSize: 24, color: "#1890ff" }}
+                        />
+                      }
+                      title={item.name}
+                      description={item.description}
+                    />
+                  </Link>
+                </Card>
+              </Col>
+            ))}
+          </Row>
           <Modal
             title={
               selectedMainCategory ? "Add New Category" : "Add Main Category"
@@ -427,13 +419,14 @@ export default function Home() {
             open={isModalOpen}
             onOk={handleCreateCategory}
             onCancel={() => setIsModalOpen(false)}
-            width={600}
+            width={400}
             okText="Create"
             cancelText="Cancel"
           >
             <Form
               form={form}
               layout="vertical"
+              size="small"
               initialValues={categoryInfo}
               onFinish={handleCreateCategory}
             >
@@ -456,7 +449,7 @@ export default function Home() {
               </Form.Item>
 
               <Form.Item label="Active" name="isactive" valuePropName="checked">
-                <Switch />
+                <Switch size="small" />
               </Form.Item>
             </Form>
           </Modal>
@@ -470,13 +463,14 @@ export default function Home() {
               setEditingCategory(null);
               form.resetFields();
             }}
-            width={600}
+            width={400}
             okText="Save"
             cancelText="Cancel"
           >
             <Form
               form={form}
               layout="vertical"
+              size="small"
               initialValues={categoryInfo}
               onFinish={handleEditCategory}
             >
@@ -499,7 +493,7 @@ export default function Home() {
               </Form.Item>
 
               <Form.Item label="Active" name="isactive" valuePropName="checked">
-                <Switch />
+                <Switch size="small" />
               </Form.Item>
             </Form>
           </Modal>
