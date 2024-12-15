@@ -282,7 +282,7 @@ export default function Home() {
               Нэмэх
             </Button>
           )}
-          <div className="folder-list">
+          <div className="flex flex-col">
             {mainCategories.map((item) => (
               <Card
                 size="small"

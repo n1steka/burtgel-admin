@@ -245,14 +245,14 @@ export const CategoryProduct: React.FC<CategoryProductProps> = ({
               </Form.Item>
 
               <Form.Item
-                label="Бар код"
+                label="Бар код заавал оруулах шаардлагаггүй автоматаар үүсгэгдэнэ"
                 name="bar_code"
-                rules={[
-                  {
-                    required: true,
-                    message: "Бар кодыг оруулна уу!",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Бар кодыг оруулна уу!",
+                //   },
+                // ]}
               >
                 <Input placeholder="Бар кодыг оруулах" />
               </Form.Item>
@@ -293,7 +293,7 @@ export const CategoryProduct: React.FC<CategoryProductProps> = ({
           <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4 mt-4 sm:mt-6">
             <Button
               className="w-full sm:w-auto"
-              onClick={onCancel || (() => router.push("/category/" + id))}
+              onClick={onCancel || (() => router.back())}
             >
               <Space>
                 <RollbackOutlined />
