@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
   baseURL:
     utga === true
       ? "http://localhost:8080/api"
-      : "http://178.128.98.157:8080/api/api",
+      : "http://178.128.98.157:8080/api",
 });
 
 axiosInstance.interceptors.request.use(
