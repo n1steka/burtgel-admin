@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
   baseURL:
     utga === true
       ? "http://localhost:8080/api"
-      : "https://7fbd-66-181-176-234.ngrok-free.app/api",
+      : "http://178.128.98.157:8080/api/api",
 });
 
 axiosInstance.interceptors.request.use(
