@@ -24,6 +24,8 @@ import {
   PlusOutlined,
   EditOutlined,
   FolderOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import { useAuth } from "@/context/AuthContext";
 const { Sider, Content } = Layout;
@@ -78,6 +80,23 @@ export default function Home() {
     pageSize: 10,
     total: 0,
   });
+
+  const [siderCollapsed, setSiderCollapsed] = useState<boolean>(false);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth <= 768) {
+        setSiderCollapsed(true);
+      }
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleCreateCategory = async () => {
     try {
@@ -265,23 +284,40 @@ export default function Home() {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider width={250} theme="light">
+      <Sider 
+        width={250} 
+        theme="light"
+        collapsible
+        collapsed={siderCollapsed}
+        trigger={null}
+        breakpoint="lg"
+        collapsedWidth={isMobile ? 0 : 80}
+        style={{
+          position: isMobile ? 'fixed' : 'relative',
+          height: '100vh',
+          zIndex: 1000,
+          left: siderCollapsed && isMobile ? -250 : 0,
+          transition: 'all 0.2s'
+        }}
+      >
         <div style={{ padding: 12 }}>
-          <Title level={5}>Байгууллага</Title>
-          {isAdmin && (
-            <Button
-              size="small"
-              type="primary"
-              icon={<PlusOutlined />}
-              className="mb-3 w-full"
-              onClick={() => {
-                setSelectedMainCategory(null);
-                setIsModalOpen(true);
-              }}
-            >
-              Нэмэх
-            </Button>
-          )}
+          <div className="flex items-center justify-between mb-3">
+            <Title level={5} style={{ margin: 0 }}>Байгууллага</Title>
+            {isAdmin && (
+              <Button
+                size="small"
+                type="primary"
+                icon={<PlusOutlined />}
+                className="mb-3 w-full"
+                onClick={() => {
+                  setSelectedMainCategory(null);
+                  setIsModalOpen(true);
+                }}
+              >
+                Нэмэх
+              </Button>
+            )}
+          </div>
           <div className="flex flex-col">
             {mainCategories.map((item) => (
               <Card
@@ -338,22 +374,33 @@ export default function Home() {
         </div>
       </Sider>
 
-      <Layout>
-        <Content style={{ padding: 14 }}>
+      <Layout style={{ marginLeft: isMobile ? 0 : (siderCollapsed ? 80 : 250) }}>
+        <Content style={{ padding: isMobile ? 8 : 14 }}>
           <div
             style={{
               marginBottom: 16,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              flexWrap: "wrap",
+              gap: 8
             }}
           >
-            <Title level={5}>
-              {selectedMainCategory ? selectedMainCategory.name : "Categories"}
-            </Title>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {isMobile && (
+                <Button
+                  type="text"
+                  icon={siderCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                  onClick={() => setSiderCollapsed(!siderCollapsed)}
+                />
+              )}
+              <Title level={5} style={{ margin: 0 }}>
+                {selectedMainCategory ? selectedMainCategory.name : "Categories"}
+              </Title>
+            </div>
             {isAdmin && selectedMainCategory && (
               <Button
-                size="small"
+                size={isMobile ? "middle" : "small"}
                 type="primary"
                 icon={<PlusOutlined />}
                 onClick={() => setIsModalOpen(true)}
@@ -363,9 +410,9 @@ export default function Home() {
             )}
           </div>
 
-          <Row gutter={[12, 12]}>
+          <Row gutter={[8, 8]}>
             {categories.map((item) => (
-              <Col key={item.id} xs={24} sm={12} md={8} lg={6}>
+              <Col key={item.id} xs={24} sm={24} md={12} lg={8} xl={6}>
                 <Card
                   size="small"
                   hoverable
