@@ -267,25 +267,17 @@ export const CategoryProduct: React.FC<CategoryProductProps> = ({
                   },
                 ]}
               >
-                <Select
-                  placeholder="Ангилал сонгох"
-                  showSearch
-                  optionFilterProp="label"
-                  filterOption={(input, option) => {
-                    const label = String(option?.label || "");
-                    return label.toLowerCase().includes(input.toLowerCase());
-                  }}
-                >
+                <select className="ant-select-selector">
+                  <option value="">Ангилал сонгох</option>
                   {categories.map((category: any) => (
-                    <Select.Option
+                    <option 
                       key={category.id}
                       value={category.id}
-                      label={`${category.id}. ${category.name}`}
                     >
                       {category.id}. {category.name}
-                    </Select.Option>
+                    </option>
                   ))}
-                </Select>
+                </select>
               </Form.Item>
             </Col>
           </Row>
