@@ -83,21 +83,6 @@ export default function Home() {
 
   const [siderCollapsed, setSiderCollapsed] = useState<boolean>(false);
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-      if (window.innerWidth <= 768) {
-        setSiderCollapsed(true);
-      }
-    };
-
-    handleResize(); // Initial check
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   const handleCreateCategory = async () => {
     try {
       const values = await form.validateFields();
@@ -290,34 +275,30 @@ export default function Home() {
         collapsible
         collapsed={siderCollapsed}
         trigger={null}
-        breakpoint="lg"
-        collapsedWidth={isMobile ? 0 : 80}
-        style={{
-          position: isMobile ? 'fixed' : 'relative',
-          height: '100vh',
-          zIndex: 1000,
-          left: siderCollapsed && isMobile ? -250 : 0,
-          transition: 'all 0.2s'
-        }}
       >
         <div style={{ padding: 12 }}>
           <div className="flex items-center justify-between mb-3">
             <Title level={5} style={{ margin: 0 }}>Байгууллага</Title>
-            {isAdmin && (
-              <Button
-                size="small"
-                type="primary"
-                icon={<PlusOutlined />}
-                className="mb-3 w-full"
-                onClick={() => {
-                  setSelectedMainCategory(null);
-                  setIsModalOpen(true);
-                }}
-              >
-                Нэмэх
-              </Button>
-            )}
+            <Button
+              type="text"
+              icon={siderCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setSiderCollapsed(!siderCollapsed)}
+            />
           </div>
+          {isAdmin && (
+            <Button
+              size="small"
+              type="primary"
+              icon={<PlusOutlined />}
+              className="mb-3 w-full"
+              onClick={() => {
+                setSelectedMainCategory(null);
+                setIsModalOpen(true);
+              }}
+            >
+              Нэмэх
+            </Button>
+          )}
           <div className="flex flex-col">
             {mainCategories.map((item) => (
               <Card
@@ -374,33 +355,22 @@ export default function Home() {
         </div>
       </Sider>
 
-      <Layout style={{ marginLeft: isMobile ? 0 : (siderCollapsed ? 80 : 250) }}>
-        <Content style={{ padding: isMobile ? 8 : 14 }}>
+      <Layout>
+        <Content style={{ padding: 14 }}>
           <div
             style={{
               marginBottom: 16,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              flexWrap: "wrap",
-              gap: 8
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              {isMobile && (
-                <Button
-                  type="text"
-                  icon={siderCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                  onClick={() => setSiderCollapsed(!siderCollapsed)}
-                />
-              )}
-              <Title level={5} style={{ margin: 0 }}>
-                {selectedMainCategory ? selectedMainCategory.name : "Categories"}
-              </Title>
-            </div>
+            <Title level={5}>
+              {selectedMainCategory ? selectedMainCategory.name : "Categories"}
+            </Title>
             {isAdmin && selectedMainCategory && (
               <Button
-                size={isMobile ? "middle" : "small"}
+                size="small"
                 type="primary"
                 icon={<PlusOutlined />}
                 onClick={() => setIsModalOpen(true)}
@@ -410,9 +380,9 @@ export default function Home() {
             )}
           </div>
 
-          <Row gutter={[8, 8]}>
+          <Row gutter={[12, 12]}>
             {categories.map((item) => (
-              <Col key={item.id} xs={24} sm={24} md={12} lg={8} xl={6}>
+              <Col key={item.id} xs={24} sm={12} md={8} lg={6}>
                 <Card
                   size="small"
                   hoverable
