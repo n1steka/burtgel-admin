@@ -53,8 +53,8 @@ export default function SignIn() {
                 <Input
                   id="email"
                   name="email"
-                  type="tel" // Input type changed to "tel" for email numbers
-                  autoComplete="tel"
+                  type="email"
+                  autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setemail(e.target.value)}
