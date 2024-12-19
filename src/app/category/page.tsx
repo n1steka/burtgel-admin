@@ -380,55 +380,39 @@ export default function Home() {
             )}
           </div>
 
-          <Row gutter={[12, 12]}>
-            {categories.map((item) => (
-              <Col key={item.id} xs={24} sm={12} md={8} lg={6}>
-                <Card
-                  size="small"
-                  hoverable
-                  className="folder-item"
-                  actions={
-                    isAdmin
-                      ? [
-                          <Button
-                            key="edit"
-                            type="text"
-                            size="small"
-                            icon={<EditOutlined />}
-                            onClick={() => handleEditClick(item)}
-                          />,
-                          <Button
-                            key="delete"
-                            type="text"
-                            size="small"
-                            danger
-                            icon={<DeleteOutlined />}
-                            onClick={() =>
-                              handleDeleteCategory(
-                                item.id,
-                                item.parentid === null
-                              )
-                            }
-                          />,
-                        ]
-                      : []
-                  }
-                >
-                  <Link href={`/category/${item.id}`}>
-                    <Card.Meta
-                      avatar={
-                        <FolderOutlined
-                          style={{ fontSize: 24, color: "#1890ff" }}
-                        />
-                      }
-                      title={item.name}
-                      description={item.description}
-                    />
-                  </Link>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+          <List
+            dataSource={categories}
+            renderItem={(item) => (
+              <List.Item
+                key={item.id}
+                actions={isAdmin ? [
+                  <Button
+                    key="edit"
+                    type="text"
+                    size="small"
+                    icon={<EditOutlined />}
+                    onClick={() => handleEditClick(item)}
+                  />,
+                  <Button
+                    key="delete"
+                    type="text"
+                    size="small"
+                    danger
+                    icon={<DeleteOutlined />}
+                    onClick={() => handleDeleteCategory(item.id, item.parentid === null)}
+                  />
+                ] : []}
+              >
+                <Link href={`/category/${item.id}`} style={{ width: '100%' }}>
+                  <List.Item.Meta
+                    avatar={<FolderOutlined style={{ fontSize: 24, color: "#1890ff" }} />}
+                    title={item.name}
+                    description={item.description}
+                  />
+                </Link>
+              </List.Item>
+            )}
+          />
           <Modal
             title={
               selectedMainCategory ? "Add New Category" : "Add Main Category"
