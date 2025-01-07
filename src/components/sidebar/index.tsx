@@ -1,6 +1,13 @@
 "use client";
 import * as React from "react";
-import { BookOpen, Command, Layout, PieChart, LogOut } from "lucide-react";
+import {
+  BookOpen,
+  Command,
+  Layout,
+  PieChart,
+  LogOut,
+  ServerIcon,
+} from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
@@ -45,6 +52,11 @@ const data = {
       key: "user",
       label: "Хэрэглэгч",
       icon: <Command size={18} />,
+    },
+    {
+      key: "service",
+      label: "Засвар",
+      icon: <ServerIcon size={18} />,
     },
   ] as NavItem[],
 };

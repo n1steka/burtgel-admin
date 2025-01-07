@@ -8,6 +8,26 @@ export const getProduct = async (filters = {}) => {
     console.error("Error fetching data:", error);
   }
 };
+
+export const getCategories = async (filters = {}) => {
+  try {
+    const response = await axiosInstance.get(`/allcategorys`, {
+      params: filters,
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export const getServices = async (filters = {}) => {
+  try {
+    const response = await axiosInstance.get(`/services`, { params: filters });
+    return response;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
 export const getOrders = async (filters = {}) => {
   try {
     const response = await axiosInstance.get(`/orders`, { params: filters });
