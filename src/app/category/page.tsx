@@ -415,7 +415,7 @@ export default function Home() {
           />
           <Modal
             title={
-              selectedMainCategory ? "Add New Category" : "Add Main Category"
+              selectedMainCategory ? "Харьяалагдах хэлтэс" : "Үндсэн алба хэлтэс"
             }
             open={isModalOpen}
             onOk={handleCreateCategory}
@@ -432,21 +432,19 @@ export default function Home() {
               onFinish={handleCreateCategory}
             >
               <Form.Item
-                label="Name"
+                label="Хэлтэсийн нэр"
                 name="name"
                 rules={[
                   { required: true, message: "Please input category name!" },
                 ]}
               >
-                <Input placeholder="Enter category name" />
+                <Input placeholder="Хэлтэсийн нэр" />
               </Form.Item>
 
-              <Form.Item label="Slug" name="slug">
-                <Input placeholder="Enter category slug" />
-              </Form.Item>
+             
 
-              <Form.Item label="Description" name="description">
-                <Input.TextArea placeholder="Enter category description" />
+              <Form.Item label="Тайлбар" name="description">
+                <Input.TextArea placeholder="Тайлбар заавал оруулах шаардлаггүй" />
               </Form.Item>
 
               <Form.Item label="Active" name="isactive" valuePropName="checked">
