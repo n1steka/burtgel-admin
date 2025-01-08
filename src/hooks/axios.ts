@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let utga: any = true;
+let utga: any = false;
 const axiosInstance = axios.create({
   baseURL:
     utga === true
